@@ -1,6 +1,6 @@
-FROM lscr.io/linuxserver/jellyfin:10.11.11
+FROM python:3.11-alpine as builder
+RUN pip install --no-cache-dir yt-dlp
 
-RUN mkdir -p /usr/local/bin && \
-    wget -q -O /usr/local/bin/yt-dlp https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp && \
-    chmod +x /usr/local/bin/yt-dlp && \
-    yt-dlp --version
+FROM lscr.io/linuxserver/jellyfin:10.11.11
+COPY --from=builder /usr/local/bin/yt-dlp /usr/local/bin/yt-dlp
+RUN chmod +x /usr/local/bin/yt-dlp
