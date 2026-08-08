@@ -1,11 +1,9 @@
-FROM lscr.io/linuxserver/jellyfin:latest
+FROM lscr.io/linuxserver/jellyfin:10.11.11
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update && \
+    apt-get install -y \
     python3 \
-    python3-pip \
-    python3-setuptools \
-    ca-certificates && \
-    pip install --no-cache-dir yt-dlp && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    python3-pip && \
+    pip install --no-cache-dir yt-dlp
